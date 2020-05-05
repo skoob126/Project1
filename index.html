@@ -1,13 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="Style.css">
 </head>
+
 <body>
-    
+    <nav class="navbar justify-content-center" style="background-color: forestgreen ; color: white;">
+        <div>
+            <h1 id="pageTitle">Working Title</h1>
+        </div>
+    </nav>
+    <div class="container-fluid" id= "search">
+        <div class="row">
+            <div class="col-md-2 searchArea">
+                <h3 id = "search-title" >Search for Recipe</h3>
+
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchinput">
+                    <div class="input-group-append">
+                        <button class="btn" id="searchButton" type="submit">
+                            Search
+                        </button>
+                    </div>
+                </div>
+                <!-- <div id="previousSearch">
+                
+                </div> -->
+            </div>
+
+            <div class="col-md-8">
+                <div class="container" id="recipeArea">
+                    <!-- Searched Recipe -->
+                   
+                <div class="container-fluid" id="nutritionInformation">
+                    <!-- Nutrition information?  -->
+                </div>
+
+            </div>
+        </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="./script.js"></script>
 </body>
+
 </html>
