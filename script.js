@@ -1,30 +1,15 @@
-console.log("Josue Romero")
-console.log("Emily Gaska");
-console.log("Chadi Bouaazzi")
-
-<<<<<<< HEAD
-
-function buildQueryURL() {
-
-    var queryURL = "https://api.spoonacular.com/recipes/search?query=";   
-    var queryParams = { "api-key": "2d8be9ee8837404dbaca8efa488054fc"};
-    queryParams.q = $("#search")
-    .val()
-    .trim()
-}
 
 
-
-
-
-=======
 searchTerm = "";
 var apiKey = "2d8be9ee8837404dbaca8efa488054fc";
-
+ loadInitialHistory();
+ prependHistoryElement()
+    
 
 function displayRecipe(){
     var queryURL = "https://api.spoonacular.com/recipes/search?query=" + searchTerm + "&number=2&apiKey=" + apiKey;
 
+    
     $.ajax({
         url: queryURL,
         method: "GET"
@@ -62,15 +47,51 @@ function displayRecipe(){
             //Appending to HTML
             $("#recipeArea").append(recipeDiv);
 
+            
         })
 
+        
+
 }
+function addToHistory(searchinput) {
+    var savedHistory = loadHistory();
+    savedHistory.push(searchinput);
+    localStorage.setItem('history', JSON.stringify(savedHistory));
+    // prependHistoryElement(searchinput);
+}
+
+function loadHistory() {
+    var savedHistory = localStorage.getItem('history');
+    if (savedHistory) {
+        return JSON.parse(savedHistory)
+    } else {
+        return [];
+    }
+}
+
+function loadInitialHistory() {
+    var savedHistory = loadHistory();
+    
+    for (let i = 0; i < savedHistory.length; i++) {
+       prependHistoryElement(savedHistory[i]) 
+       console.log("test");
+    }
+}
+//functioning
+function prependHistoryElement(searchinput) {
+    var searchHistoryEL = $("<a>").addClass("list-group-item")
+    searchHistoryEL.text(searchinput);
+    $('#historyList').prepend(searchHistoryEL)
+     $(`${"#searchinput"}Item`).click(function() {
+        
+     })
+}
+
 
 $("#searchButton").on("click", function () {
     searchTerm = $("#searchinput").val().trim();
+    addToHistory(searchTerm);
     console.log("Test 1: " + searchTerm);
     displayRecipe(searchTerm);
-
-
+    prependHistoryElement(searchTerm)
 })
->>>>>>> origin
