@@ -2,8 +2,13 @@
 
 searchTerm = "";
 var apiKey = "2d8be9ee8837404dbaca8efa488054fc";
-var appid = "d7b0ada5";
-var nutritionAPIKey = "564db3a1db849563e92b49fc7b5ce44c";
+var appid = "745bf414";
+var nutritionAPIKey = "ffe32e547d32e44bf969d26545b472e7";
+
+var recipe = {
+    title: "",
+    ingr: []
+}
 
 loadInitialHistory();
 prependHistoryElement()
@@ -26,8 +31,8 @@ function recipeInfoPull(id) {
             ingredientDiv.append(ingredientHeader);
 
             //For loop to pull ingredient list from API/Display on page
+            var ingredient = [];
             for (let i = 0; i < response.extendedIngredients.length; i++) {
-                var ingredient = [];
                 ingredient[i] = response.extendedIngredients[i].original;
                 var ingredientEl = [];
                 ingredientEl[i] = $("<li>").text(ingredient[i]).attr("id", "ingredient");
@@ -45,7 +50,6 @@ function recipeInfoPull(id) {
             instructionDiv.append(instructionHeader);
 
             //For loop to pull steps from API/Display on page
-            console.log("Test: " + response.analyzedInstructions[0].steps);
             var steps = response.analyzedInstructions[0].steps;
 
 
@@ -58,6 +62,9 @@ function recipeInfoPull(id) {
             }
 
             console.log(ingredient);
+            recipe.ingr = ingredient; 
+            console.log(recipe.ingr);
+            displayNutrients();
 
         })
 }
@@ -83,6 +90,9 @@ function displayRecipe(searchTerm) {
             var servings = response.results[0].servings;
             var sourceUrl = response.results[0].sourceUrl;
 
+            recipe.title = recipeTitle;
+
+            console.log(recipe.title);
 
             recipeInfoPull(recipeID);
             // console.log(recipeTitle);
@@ -112,37 +122,25 @@ function displayRecipe(searchTerm) {
         })
 }
 
-function displayNutrients(){
+function displayNutrients() {
 
     fetch("https://cors-anywhere.herokuapp.com/https://api.edamam.com/api/nutrition-details?app_id=d7b0ada5&app_key=564db3a1db849563e92b49fc7b5ce44c",
-{
- method: 'POST',
- headers: {
-    'Content-Type': 'application/json'
-    // 'Content-Type': 'application/x-www-form-urlencoded',
-  },
-  body: JSON.stringify({"title": "Fresh Ham Roasted With Rye Bread and Dried Fruit Stuffing",  "ingr": [
-    "1 fresh ham, about 18 pounds, prepared by your butcher (See Step 1)",
-    "7 cloves garlic, minced",
-    "1 tablespoon caraway seeds, crushed",
-    "4 teaspoons salt",
-    "Freshly ground pepper to taste",
-    "1 teaspoon olive oil",
-    "1 medium onion, peeled and chopped",
-    "3 cups sourdough rye bread, cut into 1/2-inch cubes",
-    "1 1/4 cups coarsely chopped pitted prunes",
-    "1 1/4 cups coarsely chopped dried apricots",
-    "1 large tart apple, peeled, cored and cut into 1/2-inch cubes",
-    "2 teaspoons chopped fresh rosemary",
-    "1 egg, lightly beaten",
-    "1 cup chicken broth, homemade or low-sodium canned"
-  ]})}
-)
-.then( resp => resp.json())
-.then(resp => console.log(resp));
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify(recipe)
+        }
+    )
+        .then(resp => resp.json())
+        .then(resp => {
+            
+        console.log(resp)
 
 var kCal = resp.calories;
-   console.log(kCal);
+    console.log(kCal);
 
 var fatLabel = resp.totalNutrients.FAT.label;
   console.log(fatLabel);
@@ -171,7 +169,9 @@ console.log(carbsLabel);
 var carbsUnit = resp.totalNutrients.CHOCDF.label.quantity.unit;
 console.log(carbsUnit);
 
+});
 }
+
 
 
 function addToHistory(searchinput) {
@@ -206,7 +206,7 @@ function prependHistoryElement(searchinput) {
 
     })
 }
-$("#clearHistory").on("click", function(){
+$("#clearHistory").on("click", function () {
     $('#historyList').empty();
     localStorage.clear();
 
