@@ -2,13 +2,16 @@
 
 searchTerm = "";
 var apiKey = "2d8be9ee8837404dbaca8efa488054fc";
+var appid = "d7b0ada5";
+var nutritionAPIKey = "564db3a1db849563e92b49fc7b5ce44c";
 
 loadInitialHistory();
 prependHistoryElement()
 
+
 function recipeInfoPull(id) {
     queryURL = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
-    console.log(queryURL);
+    console.log("Test: " + queryURL);
     $.ajax({
         url: queryURL,
         method: "GET"
@@ -59,6 +62,8 @@ function recipeInfoPull(id) {
         })
 }
 
+
+//This function displays the base information about the recipe and pulls the recipe id
 function displayRecipe(searchTerm) {
     var queryURL = `https://api.spoonacular.com/recipes/search?query=${searchTerm}&number=2&apiKey=${apiKey}`;
     $("#recipeArea").empty();
@@ -138,8 +143,14 @@ function prependHistoryElement(searchinput) {
 
     })
 }
+$("#clearHistory").on("click", function(){
+    $('#historyList').empty();
+    localStorage.clear();
 
-//On click previous search is searched again.
+})
+
+
+//On click previous search list item is searched again.
 $("#historyList").on("click", ".list-group-item", function () {
     var searchTerm = $(this).text();
     addToHistory(searchTerm);
@@ -149,7 +160,7 @@ $("#historyList").on("click", ".list-group-item", function () {
 })
 
 
-
+//On click the search term in the form is searched. 
 $("#searchButton").on("click", function () {
     searchTerm = $("#searchinput").val().trim();
     addToHistory(searchTerm);
