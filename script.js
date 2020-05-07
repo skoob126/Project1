@@ -106,6 +106,51 @@ function displayRecipe(searchTerm) {
 
         })
 }
+
+function displayNutrients(){
+
+    fetch("https://cors-anywhere.herokuapp.com/https://api.edamam.com/api/nutrition-details?app_id=d7b0ada5&app_key=564db3a1db849563e92b49fc7b5ce44c",
+{
+ method: 'POST',
+ headers: {
+    'Content-Type': 'application/json'
+    // 'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body: JSON.stringify({"title": "Fresh Ham Roasted With Rye Bread and Dried Fruit Stuffing",  "ingr": [
+    "1 fresh ham, about 18 pounds, prepared by your butcher (See Step 1)",
+    "7 cloves garlic, minced",
+    "1 tablespoon caraway seeds, crushed",
+    "4 teaspoons salt",
+    "Freshly ground pepper to taste",
+    "1 teaspoon olive oil",
+    "1 medium onion, peeled and chopped",
+    "3 cups sourdough rye bread, cut into 1/2-inch cubes",
+    "1 1/4 cups coarsely chopped pitted prunes",
+    "1 1/4 cups coarsely chopped dried apricots",
+    "1 large tart apple, peeled, cored and cut into 1/2-inch cubes",
+    "2 teaspoons chopped fresh rosemary",
+    "1 egg, lightly beaten",
+    "1 cup chicken broth, homemade or low-sodium canned"
+  ]})}
+)
+.then( resp => resp.json())
+.then(resp => console.log(resp));
+
+var kCal = resp.calories;
+   console.log(kCal);
+
+var fat = resp.FAT.label.quantity.unit;
+  console.log(fat);
+
+ var sugar = resp.SUGAR.label.quantity.unit;
+console.log(sugar)
+
+var carbs = resp.CHOCDF.label.quantity.unit;
+console.log(carbs)
+
+}
+
+
 function addToHistory(searchinput) {
     var savedHistory = loadHistory();
     savedHistory.push(searchinput);
