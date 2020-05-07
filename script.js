@@ -3,8 +3,8 @@
 searchTerm = "";
 var apiKey = "2d8be9ee8837404dbaca8efa488054fc";
 
- loadInitialHistory();
- prependHistoryElement()
+loadInitialHistory();
+prependHistoryElement()
 
 function recipeInfoPull(id) {
     queryURL = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
@@ -45,7 +45,7 @@ function recipeInfoPull(id) {
             console.log("Test: " + response.analyzedInstructions[0].steps);
             var steps = response.analyzedInstructions[0].steps;
 
-            
+
             for (let i = 0; i < steps.length; i++) {
                 var currentStep = steps[i]
                 var stepsEl = $("<p>").text(currentStep.step).attr("id", "step");
@@ -54,22 +54,21 @@ function recipeInfoPull(id) {
                 $("#recipeArea").append(instructionDiv);
             }
 
+            console.log(ingredient);
+
         })
-
-
 }
 
-
-function displayRecipe() {
+function displayRecipe(searchTerm) {
     var queryURL = `https://api.spoonacular.com/recipes/search?query=${searchTerm}&number=2&apiKey=${apiKey}`;
+    $("#recipeArea").empty();
 
-    
     $.ajax({
         url: queryURL,
         method: "GET"
     })
         .then(function (response) {
-            searchTerm = response;
+
             console.log(queryURL);
 
             // Pulling variable information from the API
@@ -104,11 +103,8 @@ function displayRecipe() {
             //Appending to HTML
             $("#recipeArea").append(recipeDiv);
 
-            
+
         })
-
-        
-
 }
 function addToHistory(searchinput) {
     var savedHistory = loadHistory();
@@ -128,21 +124,30 @@ function loadHistory() {
 
 function loadInitialHistory() {
     var savedHistory = loadHistory();
-    
+
     for (let i = 0; i < savedHistory.length; i++) {
-       prependHistoryElement(savedHistory[i]) 
-       console.log("test");
+        prependHistoryElement(savedHistory[i])
+        console.log("test");
     }
 }
-//functioning
 function prependHistoryElement(searchinput) {
     var searchHistoryEL = $("<a>").addClass("list-group-item")
     searchHistoryEL.text(searchinput);
     $('#historyList').prepend(searchHistoryEL)
-     $(`${"#searchinput"}Item`).click(function() {
-        
-     })
+    $(`${"#searchinput"}Item`).click(function () {
+
+    })
 }
+
+//On click previous search is searched again.
+$("#historyList").on("click", ".list-group-item", function () {
+    var searchTerm = $(this).text();
+    addToHistory(searchTerm);
+    console.log("Test 1: " + searchTerm);
+    displayRecipe(searchTerm);
+    prependHistoryElement(searchTerm)
+})
+
 
 
 $("#searchButton").on("click", function () {
