@@ -141,6 +141,7 @@ var kCal = resp.calories;
 
 var fat = resp.FAT.label.quantity.unit;
   console.log(fat);
+  //blah
 
  var sugar = resp.SUGAR.label.quantity.unit;
 console.log(sugar)
