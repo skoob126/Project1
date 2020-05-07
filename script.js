@@ -139,15 +139,32 @@ function displayNutrients(){
 var kCal = resp.calories;
    console.log(kCal);
 
-var fat = resp.FAT.label.quantity.unit;
-  console.log(fat);
-  //blah
+var fatLabel = resp.totalNutrients.FAT.label;
+  console.log(fatLabel);
 
- var sugar = resp.SUGAR.label.quantity.unit;
-console.log(sugar)
+  var fatAmount = resp.totalNutrients.FAT.quantity;
+  console.log(fatAmount);
+  
+  var fatUnit = resp.totalNutrients.FAT.quantity.unit;
+  console.log(fatUnit);
 
-var carbs = resp.CHOCDF.label.quantity.unit;
-console.log(carbs)
+  var sugarLabel = resp.totalNutrients.SUGAR.label;
+  console.log(sugarLabel);
+
+  var sugarAmount = resp.totalNutrients.FAT.quantity;
+  console.log(sugarAmount);
+  
+  var sugarUnit = resp.totalNutrients.SUGAR.quantity.unit;
+  console.log(sugarUnit);
+
+var carbsLabel = resp.totalNutrients.CHOCDF.label;
+console.log(carbsLabel);
+
+  var carbsAmount = resp.totalNutrients.CHOCDF.quantity;
+  console.log(carbsAmount);
+
+var carbsUnit = resp.totalNutrients.CHOCDF.label.quantity.unit;
+console.log(carbsUnit);
 
 }
 
