@@ -10,65 +10,9 @@ var recipe = {
     ingr: []
 }
 
+//Function to run upon page load
 loadInitialHistory();
 prependHistoryElement()
-
-
-function recipeInfoPull(id) {
-    queryURL = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
-    console.log("Test: " + queryURL);
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-        .then(function (response) {
-            console.log(queryURL)
-
-            //Creates div tag to hold ingredients
-            var ingredientDiv = $("<div>");
-            //Creates the section header
-            ingredientHeader = $("<h3>").text("Ingredients").attr("id", "ingredientHeader");
-            ingredientDiv.append(ingredientHeader);
-
-            //For loop to pull ingredient list from API/Display on page
-            var ingredient = [];
-            for (let i = 0; i < response.extendedIngredients.length; i++) {
-                ingredient[i] = response.extendedIngredients[i].original;
-                var ingredientEl = [];
-                ingredientEl[i] = $("<li>").text(ingredient[i]).attr("id", "ingredient");
-                ingredientDiv.append(ingredientEl).attr("id", "ingredientDiv");
-                $("#recipeArea").append(ingredientDiv);
-                // console.log(ingredientEl[i]);
-                // console.log("Test Ingredient: " + ingredient[i]);
-            }
-
-            // Analyzed Instructions
-            //Pulling the instructions for the recipe
-            var instructionDiv = $("<div>");
-            //Creates the section header
-            instructionHeader = $("<h4>").text("Instructions").attr("id", "instructionHeader");
-            instructionDiv.append(instructionHeader);
-
-            //For loop to pull steps from API/Display on page
-            var steps = response.analyzedInstructions[0].steps;
-
-
-            for (let i = 0; i < steps.length; i++) {
-                var currentStep = steps[i]
-                var stepsEl = $("<p>").text(currentStep.step).attr("id", "step");
-                stepsEl.text(currentStep.step);
-                instructionDiv.append(stepsEl).attr("id", "stepsDiv");
-                $("#recipeArea").append(instructionDiv);
-            }
-
-            console.log(ingredient);
-            recipe.ingr = ingredient; 
-            console.log(recipe.ingr);
-            displayNutrients();
-
-        })
-}
-
 
 //This function displays the base information about the recipe and pulls the recipe id
 function displayRecipe(searchTerm) {
@@ -80,9 +24,6 @@ function displayRecipe(searchTerm) {
         method: "GET"
     })
         .then(function (response) {
-
-            console.log(queryURL);
-
             // Pulling variable information from the API
             var recipeID = response.results[0].id;
             var recipeTitle = response.results[0].title;
@@ -91,14 +32,7 @@ function displayRecipe(searchTerm) {
             var sourceUrl = response.results[0].sourceUrl;
 
             recipe.title = recipeTitle;
-
-            console.log(recipe.title);
-
             recipeInfoPull(recipeID);
-            // console.log(recipeTitle);
-            // console.log(readyIn);
-            // console.log(sourceUrl);
-
             //Creating Storing div tag
             var recipeDiv = $("<div>");
 
@@ -117,10 +51,58 @@ function displayRecipe(searchTerm) {
 
             //Appending to HTML
             $("#recipeArea").append(recipeDiv);
-
-
         })
 }
+
+//Pulls the recipie ingredients and steps based on the recipe ID recieved from the displayRecipe()
+function recipeInfoPull(id) {
+    queryURL = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}`;
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    })
+        .then(function (response) {
+            //Creates div tag to hold ingredients
+            var ingredientDiv = $("<div>");
+            //Creates the section header
+            ingredientHeader = $("<h3>").text("Ingredients").attr("id", "ingredientHeader");
+            ingredientDiv.append(ingredientHeader);
+            var ingredient = [];
+           
+            //For loop to pull ingredient list from API/Display on page
+           
+            for (let i = 0; i < response.extendedIngredients.length; i++) {
+                ingredient[i] = response.extendedIngredients[i].original;
+                var ingredientEl = [];
+                ingredientEl[i] = $("<li>").text(ingredient[i]).attr("id", "ingredient");
+                ingredientDiv.append(ingredientEl).attr("id", "ingredientDiv");
+                $("#recipeArea").append(ingredientDiv);
+            }
+
+            // Analyzed Instructions
+            //Pulling the instructions for the recipe
+            var instructionDiv = $("<div>");
+            //Creates the section header
+            instructionHeader = $("<h4>").text("Instructions").attr("id", "instructionHeader");
+            instructionDiv.append(instructionHeader);
+
+            //For loop to pull steps from API/Display on page
+            var steps = response.analyzedInstructions[0].steps;
+
+            for (let i = 0; i < steps.length; i++) {
+                var currentStep = steps[i]
+                var stepsEl = $("<p>").text(currentStep.step).attr("id", "step");
+                stepsEl.text(currentStep.step);
+                instructionDiv.append(stepsEl).attr("id", "stepsDiv");
+                $("#recipeArea").append(instructionDiv);
+            }
+            recipe.ingr = ingredient;
+
+            //Calls the function displayNutrients
+            displayNutrients();
+        })
+}
+
 
 function displayNutrients() {
 
@@ -136,40 +118,42 @@ function displayNutrients() {
     )
         .then(resp => resp.json())
         .then(resp => {
+            //Creates the nutritionDiv to put the elements we are building in.
+            var nutritionDiv = $("<div>");
+            //Pulls the calculated calorie amount from the API and assigns that value to the variable kCal
+            var kCal = resp.calories;
+            //Creates the <p> tag which contains the calorie text (what we want to display on the page)
+            var kCalEl = $("<p>").text("Total Calories: " + kCal);
+            //Appends the the calorie <p> element into the nutritionDiv 
+            nutritionDiv.append(kCalEl);
+
+           //Gets the fat amount and appends to the nutrition div
+            var fatAmount = resp.totalNutrients.FAT.quantity;
+            var fatAmountPr = fatAmount.toPrecision(5);
+            var fatUnit = resp.totalNutrients.FAT.unit;
+            var fatEl = $("<p>").text("Total Fat: " + fatAmountPr + fatUnit);
+            nutritionDiv.append(fatEl);
+         
+            //Gets the sugar amount and appends to the nutrition div
+            var sugarAmount = resp.totalNutrients.SUGAR.quantity;
+            var sugarAmountPr = sugarAmount.toPrecision(5);
+            var sugarUnit = resp.totalNutrients.SUGAR.unit;
+            var sugarEl = $("<p>").text("Total Sugar: " + sugarAmountPr + sugarUnit)
+            nutritionDiv.append(sugarEl);
+           
             
-        console.log(resp)
+            //Gets the carb amount and appends to the nutrition div
+            var carbsAmount = resp.totalNutrients.CHOCDF.quantity;
+            var carbsAmountPr =  carbsAmount.toPrecision(5);
+            var carbsUnit = resp.totalNutrients.CHOCDF.unit;
+            var carbEl = $("<p>").text("Total Carbs: " + carbsAmountPr + carbsUnit);
+            nutritionDiv.append(carbEl);
 
-var kCal = resp.calories;
-    console.log(kCal);
+            //Appends the updated nutritionDiv into the nutritionInformation div(in the HTML)
+            $("#nutritionInformation").append(nutritionDiv);
 
-var fatLabel = resp.totalNutrients.FAT.label;
-  console.log(fatLabel);
 
-  var fatAmount = resp.totalNutrients.FAT.quantity;
-  console.log(fatAmount);
-  
-  var fatUnit = resp.totalNutrients.FAT.quantity.unit;
-  console.log(fatUnit);
-
-  var sugarLabel = resp.totalNutrients.SUGAR.label;
-  console.log(sugarLabel);
-
-  var sugarAmount = resp.totalNutrients.FAT.quantity;
-  console.log(sugarAmount);
-  
-  var sugarUnit = resp.totalNutrients.SUGAR.quantity.unit;
-  console.log(sugarUnit);
-
-var carbsLabel = resp.totalNutrients.CHOCDF.label;
-console.log(carbsLabel);
-
-  var carbsAmount = resp.totalNutrients.CHOCDF.quantity;
-  console.log(carbsAmount);
-
-var carbsUnit = resp.totalNutrients.CHOCDF.label.quantity.unit;
-console.log(carbsUnit);
-
-});
+        });
 }
 
 
@@ -190,6 +174,7 @@ function loadHistory() {
     }
 }
 
+
 function loadInitialHistory() {
     var savedHistory = loadHistory();
 
@@ -206,6 +191,8 @@ function prependHistoryElement(searchinput) {
 
     })
 }
+
+//Button clears search history once clicked
 $("#clearHistory").on("click", function () {
     $('#historyList').empty();
     localStorage.clear();

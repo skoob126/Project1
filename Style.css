@@ -8,3 +8,11 @@
 li{
     padding-left: 30px;
 }
+
+#nutritionInformation{
+    float: right;
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    margin: 20px;
+}
