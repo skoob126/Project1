@@ -18,6 +18,7 @@ $('body').flowtype({
     fontRatio : 30
    });
 
+
 //Function to run upon page load
 loadInitialHistory();
 prependHistoryElement()
