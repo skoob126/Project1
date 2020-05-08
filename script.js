@@ -105,7 +105,7 @@ function recipeInfoPull(id) {
 
 
 function displayNutrients() {
-
+    $("#nutritionInformation").empty();
     fetch("https://cors-anywhere.herokuapp.com/https://api.edamam.com/api/nutrition-details?app_id=d7b0ada5&app_key=564db3a1db849563e92b49fc7b5ce44c",
         {
             method: 'POST',
