@@ -129,21 +129,24 @@ function displayNutrients() {
 
            //Gets the fat amount and appends to the nutrition div
             var fatAmount = resp.totalNutrients.FAT.quantity;
+            var fatAmountPr = fatAmount.toPrecision(5);
             var fatUnit = resp.totalNutrients.FAT.unit;
-            var fatEl = $("<p>").text("Total Fat: " + fatAmount + fatUnit);
+            var fatEl = $("<p>").text("Total Fat: " + fatAmountPr + fatUnit);
             nutritionDiv.append(fatEl);
          
             //Gets the sugar amount and appends to the nutrition div
             var sugarAmount = resp.totalNutrients.SUGAR.quantity;
+            var sugarAmountPr = sugarAmount.toPrecision(5);
             var sugarUnit = resp.totalNutrients.SUGAR.unit;
-            var sugarEl = $("<p>").text("Total Sugar: " + sugarAmount + sugarUnit)
+            var sugarEl = $("<p>").text("Total Sugar: " + sugarAmountPr + sugarUnit)
             nutritionDiv.append(sugarEl);
            
             
             //Gets the carb amount and appends to the nutrition div
             var carbsAmount = resp.totalNutrients.CHOCDF.quantity;
+            var carbsAmountPr =  carbsAmount.toPrecision(5);
             var carbsUnit = resp.totalNutrients.CHOCDF.unit;
-            var carbEl = $("<p>").text("Total Carbs: " + carbsAmount + carbsUnit);
+            var carbEl = $("<p>").text("Total Carbs: " + carbsAmountPr + carbsUnit);
             nutritionDiv.append(carbEl);
 
             //Appends the updated nutritionDiv into the nutritionInformation div(in the HTML)
